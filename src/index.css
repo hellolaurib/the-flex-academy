@@ -15,7 +15,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Anchor links are animated in JS (useSmoothAnchors.js) */
   scroll-padding-top: 78px;
 }
 
@@ -99,9 +99,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   [data-reveal] {
     opacity: 1;
     transform: none;

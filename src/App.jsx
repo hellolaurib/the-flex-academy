@@ -12,10 +12,12 @@ import FinalCta from './sections/FinalCta.jsx'
 import Faqs from './sections/Faqs.jsx'
 import Footer from './sections/Footer.jsx'
 import useReveal from './useReveal.js'
+import useSmoothAnchors from './useSmoothAnchors.js'
 
 // The Flex Academy landing page — Figma "Landing Page" / Home (4:1089)
 export default function App() {
   useReveal()
+  useSmoothAnchors()
 
   return (
     <>
