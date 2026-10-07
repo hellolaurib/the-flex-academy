@@ -2,6 +2,10 @@ import iconX from '../assets/figma/icon-x.svg'
 import iconLinkedin from '../assets/figma/icon-linkedin.svg'
 import { TEAM, COMPANY_LOGOS } from '../data/content.js'
 
+// Each half of the track repeats the logos twice so it is wider than any screen
+const LOGO_HALF = [...COMPANY_LOGOS, ...COMPANY_LOGOS]
+const LOGO_TRACK = [...LOGO_HALF, ...LOGO_HALF]
+
 // "Meet the team" + trust logos (30:9952)
 export default function Team() {
   return (
@@ -41,24 +45,34 @@ export default function Team() {
         {/* Trust section: 835px from the section top in Figma */}
         <div className="mt-[64px] flex flex-col gap-[31px] lg:mt-[81px]">
           <p data-reveal className="text-center text-[16px] leading-[20px] lg:w-[1207px]">The Flex houses teams from 150+ companies.</p>
-          <ul className="flex flex-wrap items-end justify-center gap-[27px] lg:flex-nowrap lg:justify-start">
-            {COMPANY_LOGOS.map((l, i) => (
-              <li
-                key={l.src}
-                data-reveal
-                className={`shrink-0 bg-second transition-[opacity,transform,scale] hover:scale-110 ${l.tall ? 'h-[40px] w-[113px]' : 'h-[28px] w-[82px]'}`}
-                style={{
-                  '--d': `${i * 60}ms`,
-                  maskImage: `url("${l.src}")`,
-                  WebkitMaskImage: `url("${l.src}")`,
-                  maskSize: '100% 100%',
-                  WebkitMaskSize: '100% 100%',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskRepeat: 'no-repeat',
-                }}
-              />
-            ))}
-          </ul>
+          {/* Logo carousel: full-bleed, two identical halves sliding by -50% for a seamless loop,
+              edges fade at the 1440px frame. Pauses on hover. */}
+          <div
+            data-reveal
+            className="group relative left-1/2 w-screen -translate-x-1/2 overflow-hidden"
+            style={{
+              maskImage:
+                'linear-gradient(to right, transparent max(0px, calc(50% - 720px)), #000 calc(max(0px, calc(50% - 720px)) + 96px), #000 calc(min(100%, calc(50% + 720px)) - 96px), transparent min(100%, calc(50% + 720px)))',
+            }}
+          >
+            <ul className="marquee-track flex w-max items-end group-hover:[animation-play-state:paused]" style={{ '--loop': '70s' }}>
+              {LOGO_TRACK.map((l, i) => (
+                <li
+                  key={i}
+                  aria-hidden={i >= COMPANY_LOGOS.length}
+                  className={`mr-[27px] shrink-0 bg-second transition-[scale] duration-200 hover:scale-110 lg:mr-[40px] ${l.tall ? 'h-[40px] w-[113px]' : 'h-[28px] w-[82px]'}`}
+                  style={{
+                    maskImage: `url("${l.src}")`,
+                    WebkitMaskImage: `url("${l.src}")`,
+                    maskSize: '100% 100%',
+                    WebkitMaskSize: '100% 100%',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                  }}
+                />
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

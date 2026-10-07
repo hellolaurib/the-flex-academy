@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import logo from '../assets/figma/logo.png'
 import { NAV_LINKS } from '../data/content.js'
 
 // NavBar (2:585) + webinar announcement Top bar (4:1584)
@@ -10,9 +9,11 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-40 bg-second shadow-[-3px_0px_3px_3px_rgba(0,0,0,0.05)]">
-        <nav className="mx-auto flex h-[78px] max-w-[1440px] items-center justify-between px-[16px] lg:pr-[115px] lg:pl-[120px]">
-          <a href="#top" className="block h-[29.06px] w-[120px]" aria-label="The Flex — home">
-            <img alt="The Flex" src={logo} className="block size-full object-contain object-bottom" />
+        <nav className="mx-auto flex h-[78px] max-w-[1440px] items-center justify-between px-[16px] lg:pr-[115px] lg:pl-[104px]">
+          {/* Wordmark (Figma "Group 1", 36:2028) */}
+          <a href="#top" className="flex w-[84px] flex-col font-serif leading-[1.2] font-medium text-principal [font-feature-settings:'salt'_1]" aria-label="The Flex Academy — home">
+            <span className="text-[30px] tracking-[-0.66px]">the flex</span>
+            <span className="text-[15px] tracking-[1.95px]">ACADEMY</span>
           </a>
 
           <ul className="hidden w-[564px] items-center gap-[51px] text-[14px] leading-[19px] text-principal lg:flex">

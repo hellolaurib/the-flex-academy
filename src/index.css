@@ -1,8 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Host+Grotesk:wght@300&family=Poppins:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Figtree:ital,wght@0,300..900;1,300..900&family=Host+Grotesk:wght@300&family=Poppins:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: 'Figtree', system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-poppins: 'Poppins', system-ui, sans-serif;
   --font-grotesk: 'Host Grotesk', system-ui, sans-serif;
 
@@ -89,6 +90,16 @@ body {
   animation: pulse-ring 2.2s ease-out infinite;
 }
 
+/* Logo carousel: the track holds two identical halves and slides one half */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee var(--loop, 60s) linear infinite;
+}
+
 /* Nav links: underline grows from the left */
 .link-underline {
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
@@ -106,7 +117,8 @@ body {
   }
   .enter-up,
   .enter-scale,
-  .pulse-ring {
+  .pulse-ring,
+  .marquee-track {
     animation: none;
   }
 }
