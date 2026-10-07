@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from '../components/Button.jsx'
 import heroBg from '../assets/figma/hero-bg.jpg'
 import starsHero from '../assets/figma/stars-hero.svg'
@@ -9,6 +9,17 @@ import playIcon from '../assets/figma/play-icon.svg'
 // Hero (25:3723) + "Link dialog - open lightbox" video card (25:3729)
 export default function Hero() {
   const [lightbox, setLightbox] = useState(false)
+  const stickRef = useRef(null)
+  const [height, setHeight] = useState(0)
+
+  // Measure the block so it can stick by its bottom edge (see below)
+  useEffect(() => {
+    const el = stickRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => setHeight(el.offsetHeight))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   useEffect(() => {
     if (!lightbox) return
@@ -23,6 +34,13 @@ export default function Hero() {
 
   return (
     <>
+      {/* Like cloudbeds.com: once its bottom reaches the bottom of the screen, the hero +
+          video block stays put and the green stats module slides up over it. */}
+      <div
+        ref={stickRef}
+        className="z-0 bg-second pb-[64px] lg:sticky"
+        style={{ top: height ? `min(78px, calc(100vh - ${height}px))` : undefined }}
+      >
       <section id="top" className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <img alt="" src={heroBg} data-parallax style={{ translate: '0 var(--parallax, 0px)' }} className="absolute inset-0 size-full scale-110 object-cover object-bottom" />
@@ -69,6 +87,8 @@ export default function Hero() {
             />
           </div>
         </button>
+      </div>
+
       </div>
 
       {lightbox && (

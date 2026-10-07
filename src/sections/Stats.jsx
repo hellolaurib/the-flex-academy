@@ -108,7 +108,7 @@ export default function Stats() {
   const fill = clamp(progress / FILL_END) * (TOTAL_WORDS + EDGE)
 
   return (
-    <section ref={wrapRef} className="mt-[64px] bg-principal text-second lg:h-[190vh]">
+    <section ref={wrapRef} className="relative z-10 bg-principal text-second lg:h-[190vh] lg:shadow-[0px_-24px_48px_rgba(0,0,0,0.18)]">
       <div
         ref={pinRef}
         // Fills the screen under the 78px header; on short screens it pins higher so the tiles stay visible

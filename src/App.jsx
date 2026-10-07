@@ -21,8 +21,11 @@ export default function App() {
     <>
       <Header />
       <main>
-        <Hero />
-        <Stats />
+        {/* Hero sticks inside this wrapper only, so it can never peek through later sections */}
+        <div className="relative">
+          <Hero />
+          <Stats />
+        </div>
         <HowItWorks />
         <Grow />
         <Learn />
