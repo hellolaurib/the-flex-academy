@@ -118,3 +118,21 @@ export const FAQS = [
     a: "Register anyway and we'll send you the recording.",
   },
 ]
+
+// Strategy-call booking modal ("Choose day", 38:3024 / 41:219). Figma shows one
+// example per field (as the placeholder); the other options are filled in.
+export const BOOKING_FIELDS = [
+  { key: 'units', label: 'Units today', placeholder: '1 to 3', options: ['None yet', '1 to 3', '4 to 10', '11 to 25', 'More than 25'] },
+  { key: 'target', label: 'Target in 12 months', placeholder: '6 to 15', options: ['1 to 5', '6 to 15', '16 to 30', '31 to 50', 'More than 50'] },
+  { key: 'city', label: 'City', placeholder: 'Manchester', options: ['London', 'Manchester', 'Birmingham', 'Liverpool', 'Leeds', 'Edinburgh', 'Glasgow', 'Bristol', 'Other'] },
+  { key: 'budget', label: 'Budget', placeholder: '$5K to 15K', options: ['Under $5K', '$5K to 15K', '$15K to 50K', '$50K to 100K', 'More than $100K'] },
+]
+
+// Call slots shown once a day is picked (local time), and how far ahead people can book
+export const BOOKING_SLOTS = ['10:00', '11:00', '15:00', '16:00']
+export const BOOKING_DAYS_AHEAD = 21
+export const CALL_MINUTES = 45
+
+// Webinar start/end in UTC (7–8 PM London, GMT in November), for the "your time zone" line
+export const WEBINAR_START = '2026-11-12T19:00:00Z'
+export const WEBINAR_END = '2026-11-12T20:00:00Z'

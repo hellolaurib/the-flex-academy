@@ -1,5 +1,26 @@
-import { useState } from 'react'
-import { EVENT_DETAILS, COUNTRIES } from '../data/content.js'
+import { useCallback, useState } from 'react'
+import Modal from '../components/Modal.jsx'
+import Confirmation from '../components/Confirmation.jsx'
+import { EVENT_DETAILS, COUNTRIES, WEBINAR_START, WEBINAR_END } from '../data/content.js'
+import iconCalendar from '../assets/figma/summary-calendar.svg'
+import iconLocation from '../assets/figma/summary-location.svg'
+
+// "19:00 - 20:00, Thursday, November 12, 2026" (London time), as in the Summary frame
+const WEBINAR_WHEN = (() => {
+  const start = new Date(WEBINAR_START)
+  const opts = { timeZone: 'Europe/London' }
+  const hhmm = (d) => d.toLocaleTimeString('en-GB', { ...opts, hour: '2-digit', minute: '2-digit' })
+  const day = start.toLocaleDateString('en-US', { ...opts, weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+  return `${hhmm(start)} - ${hhmm(new Date(WEBINAR_END))}, ${day}`
+})()
+
+// "6:00 to 7:00 pm · your time zone"
+function localWebinarTime() {
+  const t = (d) => new Date(d).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()
+  const [start, end] = [t(WEBINAR_START), t(WEBINAR_END)]
+  const samePeriod = start.slice(-2) === end.slice(-2)
+  return `${samePeriod ? start.slice(0, -3) : start} to ${end} · your time zone`
+}
 
 const label = 'block text-[14px] leading-[19px] text-[#1e1e1e]'
 const input =
@@ -15,6 +36,11 @@ export default function Webinar() {
     e.preventDefault()
     setSent(true)
   }
+
+  const close = useCallback(() => {
+    setSent(false)
+    setForm({ name: '', email: '', country: '' })
+  }, [])
 
   return (
     <section id="webinar" className="mx-auto flex max-w-[1240px] flex-col items-center gap-[59px] px-[16px] pt-[109px]">
@@ -54,47 +80,58 @@ export default function Webinar() {
           </div>
           <div className="mx-[32px] mt-[26px] h-px bg-[rgba(30,30,30,0.1)]" />
 
-          {sent ? (
-            <div role="status" className="enter-up flex flex-col items-start gap-[12px] px-[37px] pt-[40px] pb-[40px]">
-              <p className="text-[24px] leading-[normal] font-semibold text-principal">You're in, {form.name.split(' ')[0]}!</p>
-              <p className="text-[16px] leading-[20px] text-[rgba(30,30,30,0.7)]">
-                We've saved your seat. Check {form.email} for the joining link — and if you can't make it live, we'll send you the recording.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={submit} className="pt-[14px] pr-[26.58px] pb-[32px] pl-[37px]">
-              <label className={label}>
-                Full name
-                <input required value={form.name} onChange={set('name')} placeholder="Enter your full name" autoComplete="name" className={input} />
-              </label>
-              <label className={`${label} mt-[17.6px]`}>
-                Email ID
-                <input required type="email" value={form.email} onChange={set('email')} placeholder="Enter your email" autoComplete="email" className={input} />
-              </label>
-              <label className={`${label} mt-[17.6px]`}>
-                Country
-                <select
-                  required
-                  value={form.country}
-                  onChange={set('country')}
-                  className={`${input} cursor-pointer appearance-none ${form.country ? '' : 'text-[rgba(30,30,30,0.4)]'}`}
-                >
-                  <option value="" disabled>Select your country</option>
-                  {COUNTRIES.map((c) => (
-                    <option key={c} value={c} className="text-[#1e1e1e]">{c}</option>
-                  ))}
-                </select>
-              </label>
-              <button
-                type="submit"
-                className="mt-[40px] block h-[46.41px] w-full cursor-pointer rounded-[4px] bg-principal font-poppins text-[16px] leading-[22.4px] text-white transition-[opacity,scale] hover:opacity-90 active:scale-[0.98]"
+          <form onSubmit={submit} className="pt-[14px] pr-[26.58px] pb-[32px] pl-[37px]">
+            <label className={label}>
+              Full name
+              <input required value={form.name} onChange={set('name')} placeholder="Enter your full name" autoComplete="name" className={input} />
+            </label>
+            <label className={`${label} mt-[17.6px]`}>
+              Email ID
+              <input required type="email" value={form.email} onChange={set('email')} placeholder="Enter your email" autoComplete="email" className={input} />
+            </label>
+            <label className={`${label} mt-[17.6px]`}>
+              Country
+              <select
+                required
+                value={form.country}
+                onChange={set('country')}
+                className={`${input} cursor-pointer appearance-none ${form.country ? '' : 'text-[rgba(30,30,30,0.4)]'}`}
               >
-                Save my free seat
-              </button>
-            </form>
-          )}
+                <option value="" disabled>Select your country</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c} value={c} className="text-[#1e1e1e]">{c}</option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="submit"
+              className="mt-[40px] block h-[46.41px] w-full cursor-pointer rounded-[4px] bg-principal font-poppins text-[16px] leading-[22.4px] text-white transition-[opacity,scale] hover:opacity-90 active:scale-[0.98]"
+            >
+              Save my free seat
+            </button>
+          </form>
         </div>
       </div>
+
+      {/* "Summary" seat confirmation (41:1340) */}
+      <Modal open={sent} onClose={close} label="Seat saved" className="max-w-[618px]">
+        <Confirmation
+          title={`You are in, ${form.name.trim().split(' ')[0]}`}
+          subtitle="Your seat for the free live webinar is saved."
+          rows={[
+            { icon: iconCalendar, text: WEBINAR_WHEN },
+            { icon: iconLocation, text: localWebinarTime() },
+          ]}
+        >
+          <div className="flex w-full flex-col gap-[9px] text-center text-[12px] leading-[20px] text-[#737373]">
+            <p>We've sent the link to {form.email}.</p>
+            <p>
+              Already running units?{' '}
+              <a href="#book" onClick={close} className="font-semibold text-principal underline">Book a strategy call</a>
+            </p>
+          </div>
+        </Confirmation>
+      </Modal>
     </section>
   )
 }

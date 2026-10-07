@@ -11,6 +11,7 @@ import Webinar from './sections/Webinar.jsx'
 import FinalCta from './sections/FinalCta.jsx'
 import Faqs from './sections/Faqs.jsx'
 import Footer from './sections/Footer.jsx'
+import BookingModal from './components/BookingModal.jsx'
 import useReveal from './useReveal.js'
 import useSmoothAnchors from './useSmoothAnchors.js'
 
@@ -39,6 +40,7 @@ export default function App() {
         <Faqs />
       </main>
       <Footer />
+      <BookingModal />
     </>
   )
 }

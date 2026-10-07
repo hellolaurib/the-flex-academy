@@ -16,7 +16,7 @@ const SIZES = {
   call: { label: 'Book a strategy call', width: 'w-[205px]', labelWidth: 'w-[127px]' },
 }
 
-export default function Button({ kind = 'call', variant = 'cream', href, onClick, className = '' }) {
+export default function Button({ kind = 'call', variant = 'cream', href, onClick, type = 'button', className = '' }) {
   const size = SIZES[kind]
   const Tag = href ? 'a' : 'button'
   const restArrow = variant === 'cream' ? arrowDark : arrowLight
@@ -25,7 +25,7 @@ export default function Button({ kind = 'call', variant = 'cream', href, onClick
     <Tag
       href={href}
       onClick={onClick}
-      type={href ? undefined : 'button'}
+      type={href ? undefined : type}
       className={`group inline-flex h-[39px] shrink-0 cursor-pointer items-center gap-[7px] rounded-[30px] border border-transparent pl-[24px] text-[12.8px] font-semibold whitespace-nowrap underline-offset-2 transition-[color,background-color,scale] duration-200 active:scale-[0.97] ${size.width} ${VARIANTS[variant]} ${className}`}
     >
       <span className={`${size.labelWidth} text-center leading-[13px]`}>{size.label}</span>
