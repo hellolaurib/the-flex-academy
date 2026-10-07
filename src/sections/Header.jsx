@@ -1,10 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Button from '../components/Button.jsx'
 import { NAV_LINKS } from '../data/content.js'
 
 // NavBar (2:585) + webinar announcement Top bar (4:1584)
 export default function Header() {
   const [bannerOpen, setBannerOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showCta, setShowCta] = useState(false)
+  const bannerRef = useRef(null)
+
+  // The navbar CTA slides in once the announcement bar has scrolled away under the header
+  useEffect(() => {
+    const update = () => {
+      const banner = bannerRef.current
+      setShowCta(banner ? banner.getBoundingClientRect().bottom <= 78 : window.scrollY > 10)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [bannerOpen])
 
   return (
     <>
@@ -16,6 +34,7 @@ export default function Header() {
             <span className="text-[15px] tracking-[1.95px]">ACADEMY</span>
           </a>
 
+          <div className="flex items-center">
           <ul className="hidden w-[564px] items-center gap-[51px] text-[14px] leading-[19px] text-principal lg:flex">
             {NAV_LINKS.map((l) => (
               <li key={l.href} className="whitespace-nowrap">
@@ -23,6 +42,15 @@ export default function Header() {
               </li>
             ))}
           </ul>
+
+          <div
+            inert={!showCta}
+            className={`overflow-hidden transition-[max-width,opacity,margin] duration-500 ease-[cubic-bezier(0.2,0.7,0.2,1)] ${
+              showCta ? 'mr-[8px] max-w-[205px] opacity-100 lg:mr-0 lg:ml-[32px]' : 'max-w-0 opacity-0'
+            }`}
+          >
+            <Button kind="call" variant="green" href="#book" />
+          </div>
 
           <button
             type="button"
@@ -35,6 +63,7 @@ export default function Header() {
             <span className={`h-[2px] w-[22px] bg-principal transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
             <span className={`h-[2px] w-[22px] bg-principal transition-transform ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
           </button>
+          </div>
         </nav>
 
         {menuOpen && (
@@ -49,7 +78,7 @@ export default function Header() {
       </header>
 
       {bannerOpen && (
-        <div className="relative bg-principal px-[40px] py-[16px] text-center text-[12px] text-white lg:h-[63px] lg:pt-[26px] lg:pb-0">
+        <div ref={bannerRef} className="relative bg-principal px-[40px] py-[16px] text-center text-[12px] text-white lg:h-[63px] lg:pt-[26px] lg:pb-0">
           <p className="mx-auto max-w-[655px] leading-[normal]">
             Free live webinar on Friday:&nbsp; how to start a short-term rental business, by the founders of The Flex.&nbsp;{' '}
             <a href="#webinar" className="italic underline">Save my seat here</a>
