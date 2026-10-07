@@ -1,0 +1,13 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="SmileyWink">
+<g id="Vector">
+</g>
+<path id="Vector_2" d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="white" stroke-opacity="0.7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="Vector_3">
+<path d="M8.625 11.0625C9.14277 11.0625 9.5625 10.6428 9.5625 10.125C9.5625 9.60723 9.14277 9.1875 8.625 9.1875C8.10723 9.1875 7.6875 9.60723 7.6875 10.125C7.6875 10.6428 8.10723 11.0625 8.625 11.0625Z" fill="white" fill-opacity="0.7"/>
+<path d="M8.625 9.25C9.10825 9.25 9.5 9.64175 9.5 10.125C9.5 10.6082 9.10825 11 8.625 11C8.14175 11 7.75 10.6082 7.75 10.125C7.75 9.64175 8.14175 9.25 8.625 9.25Z" stroke="white" stroke-opacity="0.7" stroke-width="0.125"/>
+</g>
+<path id="Vector_4" d="M14.25 10.125H16.5" stroke="white" stroke-opacity="0.7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M15.9 14.25C15.5035 14.9331 14.9346 15.5 14.2502 15.8941C13.5657 16.2882 12.7898 16.4956 12 16.4956C11.2102 16.4956 10.4343 16.2882 9.74984 15.8941C9.0654 15.5 8.49648 14.9331 8.1 14.25" stroke="white" stroke-opacity="0.7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>

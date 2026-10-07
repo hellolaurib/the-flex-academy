@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Host+Grotesk:wght@300&family=Poppins:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Figtree', system-ui, sans-serif;
+  --font-poppins: 'Poppins', system-ui, sans-serif;
+  --font-grotesk: 'Host Grotesk', system-ui, sans-serif;
+
+  --color-principal: #1c391a;
+  --color-second: #fff9e9;
+  --color-cream: #fffdf6;
+  --color-ink: #141313;
+  --color-brown: #261c0a;
+  --color-line: #d9d9cc;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 78px;
+}
+
+body {
+  margin: 0;
+  background: var(--color-second);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
