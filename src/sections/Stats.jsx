@@ -15,14 +15,10 @@ const EDGE = 3
 // The fill completes at this point of the pin, leaving a beat to read it
 const FILL_END = 0.85
 
-// The 4 Figma tiles, repeated so one half of the track is wider than any screen;
-// the track holds two identical halves and slides by -50% for a seamless loop.
-const REPEAT = 3
-const HALF = Array.from({ length: REPEAT }, () => STATS).flat()
-const TILE_W = 271
-const GAP = 41
-const PX_PER_SECOND = 30
-const LOOP_SECONDS = (HALF.length * (TILE_W + GAP)) / PX_PER_SECOND
+// Count-up: each tile's number runs for COUNT_MS, starting STAGGER_MS after the previous one
+const COUNT_MS = 1600
+const STAGGER_MS = 150
+const COUNT_TOTAL = COUNT_MS + STAGGER_MS * (STATS.length - 1)
 
 const clamp = (v) => Math.min(1, Math.max(0, v))
 
@@ -36,14 +32,15 @@ function Words({ words, offset, fill }) {
 }
 
 // "Pin wrapper: its extra height is the scroll range for the word-fill animation → Section" (24:3501)
-// plus its "Full-bleed stat-tile marquee (JS duplicates tiles for seamless loop)" layer.
-// Desktop: the module fills the screen and stays pinned while the words fill in;
-// the stat tiles loop continuously underneath, and their numbers count up once.
+// Desktop: the module fills the screen and stays pinned while the words fill in
+// (same feel as cloudbeds.com). The stat tiles stay put as in Figma; only their numbers move,
+// counting up every time the tiles come into view.
 export default function Stats() {
   const wrapRef = useRef(null)
   const pinRef = useRef(null)
   const [progress, setProgress] = useState(1)
-  const [count, setCount] = useState(1)
+  // Milliseconds into the count-up animation (starts finished, so no-JS / reduced motion shows final numbers)
+  const [elapsed, setElapsed] = useState(COUNT_TOTAL)
 
   // Scroll-driven word fill
   useEffect(() => {
@@ -77,26 +74,28 @@ export default function Stats() {
     }
   }, [])
 
-  // Numbers count up once, the first time the tiles come into view
+  // Numbers count up from 0 each time the tiles scroll into view
   const tilesRef = useRef(null)
   useEffect(() => {
     const el = tilesRef.current
     if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    setCount(0)
     let raf = 0
     const io = new IntersectionObserver(
       ([e]) => {
-        if (!e.isIntersecting) return
-        io.disconnect()
+        cancelAnimationFrame(raf)
+        if (!e.isIntersecting) {
+          setElapsed(0) // reset while hidden, ready to replay
+          return
+        }
         const start = performance.now()
         const tick = (now) => {
-          const t = Math.min(1, (now - start) / 1800)
-          setCount(1 - Math.pow(1 - t, 3))
-          if (t < 1) raf = requestAnimationFrame(tick)
+          const ms = Math.min(COUNT_TOTAL, now - start)
+          setElapsed(ms)
+          if (ms < COUNT_TOTAL) raf = requestAnimationFrame(tick)
         }
         raf = requestAnimationFrame(tick)
       },
-      { threshold: 0.4 },
+      { threshold: 0.5 },
     )
     io.observe(el)
     return () => {
@@ -127,35 +126,25 @@ export default function Stats() {
               </span>
             </p>
           </div>
-        </div>
 
-        {/* Full-bleed marquee, edges fade out at the 1440px frame like the reference */}
-        <div
-          ref={tilesRef}
-          className="group mt-[40px] w-full overflow-hidden lg:mt-[28px]"
-          style={{
-            maskImage:
-              'linear-gradient(to right, transparent max(0px, calc(50% - 720px)), #000 calc(max(0px, calc(50% - 720px)) + 48px), #000 calc(min(100%, calc(50% + 720px)) - 48px), transparent min(100%, calc(50% + 720px)))',
-          }}
-        >
-          <ul
-            className="marquee-track flex w-max group-hover:[animation-play-state:paused]"
-            style={{ '--loop': `${LOOP_SECONDS}s` }}
-            aria-label="The Flex in numbers"
-          >
-            {[...HALF, ...HALF].map((s, i) => (
-              <li
-                key={i}
-                aria-hidden={i >= STATS.length}
-                className="mr-[41px] flex w-[271px] shrink-0 flex-col gap-[17px] rounded-[4px] bg-[rgba(38,28,10,0.1)] p-[24px] text-white transition-colors duration-300 hover:bg-[rgba(38,28,10,0.28)]"
-              >
-                <p className="font-grotesk text-[48px] leading-[48px] font-light tracking-[-0.96px] tabular-nums">
-                  {Math.round(s.value * count)}
-                  {s.suffix}
-                </p>
-                <p className="min-h-[35px] text-[14px] leading-[19px]">{s.label}</p>
-              </li>
-            ))}
+          <ul ref={tilesRef} className="mt-[40px] grid grid-cols-2 gap-[16px] lg:mt-[28px] lg:flex lg:gap-[41px]">
+            {STATS.map((s, i) => {
+              const t = clamp((elapsed - i * STAGGER_MS) / COUNT_MS)
+              return (
+                <li
+                  key={s.label}
+                  className="flex flex-col gap-[17px] rounded-[4px] bg-[rgba(38,28,10,0.1)] p-[24px] text-white transition-colors duration-300 hover:bg-[rgba(38,28,10,0.28)] lg:w-[271px]"
+                >
+                  <p className="font-grotesk text-[48px] leading-[48px] font-light tracking-[-0.96px] tabular-nums" aria-label={`${s.value}${s.suffix}`}>
+                    <span aria-hidden>
+                      {Math.round(s.value * (1 - Math.pow(1 - t, 3)))}
+                      {s.suffix}
+                    </span>
+                  </p>
+                  <p className="min-h-[35px] text-[14px] leading-[19px]">{s.label}</p>
+                </li>
+              )
+            })}
           </ul>
         </div>
       </div>
