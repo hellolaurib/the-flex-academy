@@ -2,32 +2,54 @@ import { useEffect, useRef, useState } from 'react'
 import { STATS } from '../data/content.js'
 
 const HEADLINE = 'No course teaches you more about running rentals than the people who run them.'
-const WORDS = HEADLINE.split(' ')
+const SUBTITLE = 'Numbers speak. Everything we teach, we use every day to run The Flex.'
+const HEAD_WORDS = HEADLINE.split(' ')
+const SUB_WORDS = SUBTITLE.split(' ')
+const TOTAL_WORDS = HEAD_WORDS.length + SUB_WORDS.length
 
-// Extra scroll distance (px) the section stays pinned for, on desktop.
-// This is the "extra height" the Figma layer name refers to.
-const PIN_RANGE = 1000
+// Word-fill model (same feel as cloudbeds.com's value-prop block):
+// one continuous fill runs through the headline and then the subtitle,
+// with a soft leading edge about EDGE words wide. Unfilled words sit at DIM.
+const DIM = 0.12
+const EDGE = 3
+// The fill completes at this point of the pin, leaving a beat to read it
+const FILL_END = 0.85
+
+// The 4 Figma tiles, repeated so one half of the track is wider than any screen;
+// the track holds two identical halves and slides by -50% for a seamless loop.
+const REPEAT = 3
+const HALF = Array.from({ length: REPEAT }, () => STATS).flat()
+const TILE_W = 271
+const GAP = 41
+const PX_PER_SECOND = 30
+const LOOP_SECONDS = (HALF.length * (TILE_W + GAP)) / PX_PER_SECOND
 
 const clamp = (v) => Math.min(1, Math.max(0, v))
-const easeOut = (t) => 1 - Math.pow(1 - t, 3)
-// Maps the overall progress p onto a [from, to] window, as 0..1
-const phase = (p, from, to) => clamp((p - from) / (to - from))
 
-// "Pin wrapper: its extra height is the scroll range for the word-fill animation → Section" (24:3501).
-// On desktop the module stays fixed on screen while you scroll through PIN_RANGE:
-//   1. headline words fill in, 2. the subtitle lights up,
-//   3. the stat cards rise in one by one while their numbers count up.
-// The end state (progress = 1) is exactly the static Figma design.
+function Words({ words, offset, fill }) {
+  return words.map((w, i) => (
+    <span key={i} style={{ opacity: DIM + (1 - DIM) * clamp((fill - (offset + i)) / EDGE) }}>
+      {w}
+      {i < words.length - 1 ? ' ' : ''}
+    </span>
+  ))
+}
+
+// "Pin wrapper: its extra height is the scroll range for the word-fill animation → Section" (24:3501)
+// plus its "Full-bleed stat-tile marquee (JS duplicates tiles for seamless loop)" layer.
+// Desktop: the module fills the screen and stays pinned while the words fill in;
+// the stat tiles loop continuously underneath, and their numbers count up once.
 export default function Stats() {
   const wrapRef = useRef(null)
   const pinRef = useRef(null)
   const [progress, setProgress] = useState(1)
+  const [count, setCount] = useState(1)
 
+  // Scroll-driven word fill
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const desktop = window.matchMedia('(min-width: 1024px)')
     let frame = 0
-
     const update = () => {
       frame = 0
       const wrap = wrapRef.current
@@ -35,19 +57,16 @@ export default function Stats() {
       if (!wrap || !pin) return
       const w = wrap.getBoundingClientRect()
       if (desktop.matches) {
-        // How far the sticky block has travelled inside its wrapper
         const p = pin.getBoundingClientRect()
         setProgress(clamp((p.top - w.top) / (w.height - p.height)))
       } else {
-        // Mobile: no pin, play it while the section scrolls into view
         const vh = window.innerHeight
-        setProgress(clamp((vh * 0.9 - w.top) / (vh * 0.9)))
+        setProgress(clamp((vh * 0.85 - w.top) / (vh * 0.9)))
       }
     }
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update)
     }
-
     update()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
@@ -58,56 +77,86 @@ export default function Stats() {
     }
   }, [])
 
-  const filled = phase(progress, 0, 0.55) * WORDS.length
-  const subtitle = phase(progress, 0.5, 0.62)
+  // Numbers count up once, the first time the tiles come into view
+  const tilesRef = useRef(null)
+  useEffect(() => {
+    const el = tilesRef.current
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    setCount(0)
+    let raf = 0
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return
+        io.disconnect()
+        const start = performance.now()
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / 1800)
+          setCount(1 - Math.pow(1 - t, 3))
+          if (t < 1) raf = requestAnimationFrame(tick)
+        }
+        raf = requestAnimationFrame(tick)
+      },
+      { threshold: 0.4 },
+    )
+    io.observe(el)
+    return () => {
+      io.disconnect()
+      cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  const fill = clamp(progress / FILL_END) * (TOTAL_WORDS + EDGE)
 
   return (
-    <section
-      ref={wrapRef}
-      className="mt-[64px] bg-principal text-second lg:h-[calc(666px_+_var(--pin))]"
-      style={{ '--pin': `${PIN_RANGE}px` }}
-    >
+    <section ref={wrapRef} className="mt-[64px] bg-principal text-second lg:h-[190vh]">
       <div
         ref={pinRef}
-        // Pinned under the 78px header; on short screens it pins higher so the cards stay visible
-        className="mx-auto max-w-[1440px] px-[16px] py-[64px] lg:sticky lg:top-[min(78px,calc(100vh_-_666px))] lg:h-[666px] lg:pt-[87px] lg:pr-[189px] lg:pb-0 lg:pl-[118px]"
+        // Fills the screen under the 78px header; on short screens it pins higher so the tiles stay visible
+        className="flex flex-col justify-center overflow-hidden py-[64px] lg:sticky lg:top-[min(78px,calc(100vh_-_666px))] lg:h-[max(666px,calc(100vh_-_78px))] lg:py-0"
       >
-        <div className="flex flex-col gap-[43px] font-medium">
-          <h2 className="text-[40px] leading-[1.14] lg:flex lg:h-[202px] lg:items-center lg:text-[65px]" aria-label={HEADLINE}>
-            <span aria-hidden>
-              {WORDS.map((w, i) => (
-                <span key={i} className="transition-opacity duration-200" style={{ opacity: 0.2 + 0.8 * clamp(filled - i) }}>
-                  {w}{i < WORDS.length - 1 ? ' ' : ''}
-                </span>
-              ))}
-            </span>
-          </h2>
-          <p
-            className="text-[22px] leading-[normal] transition-opacity duration-200 lg:flex lg:h-[54px] lg:items-center lg:text-[32px]"
-            style={{ opacity: 0.2 + 0.8 * subtitle }}
-          >
-            Numbers speak. Everything we teach, we use every day to run The Flex.
-          </p>
+        <div className="mx-auto w-full max-w-[1440px] px-[16px] lg:pr-[189px] lg:pl-[118px]">
+          <div className="flex flex-col gap-[43px] font-medium">
+            <h2 className="text-[40px] leading-[1.14] lg:flex lg:h-[202px] lg:items-center lg:text-[65px]" aria-label={HEADLINE}>
+              <span aria-hidden>
+                <Words words={HEAD_WORDS} offset={0} fill={fill} />
+              </span>
+            </h2>
+            <p className="text-[22px] leading-[normal] lg:flex lg:h-[54px] lg:items-center lg:text-[32px]" aria-label={SUBTITLE}>
+              <span aria-hidden>
+                <Words words={SUB_WORDS} offset={HEAD_WORDS.length} fill={fill} />
+              </span>
+            </p>
+          </div>
         </div>
 
-        <div className="mt-[40px] grid grid-cols-2 gap-[16px] lg:mt-[28px] lg:flex lg:gap-[41px]">
-          {STATS.map((s, i) => {
-            const enter = easeOut(phase(progress, 0.58 + i * 0.05, 0.75 + i * 0.05))
-            const count = easeOut(phase(progress, 0.6 + i * 0.05, 0.85 + i * 0.05))
-            return (
-              <div
-                key={s.label}
-                className="group flex flex-col gap-[17px] rounded-[4px] bg-[rgba(38,28,10,0.1)] p-[24px] text-white transition-colors duration-300 hover:bg-[rgba(38,28,10,0.25)] lg:w-[271px]"
-                style={{ opacity: enter, transform: `translateY(${(1 - enter) * 32}px)` }}
+        {/* Full-bleed marquee, edges fade out at the 1440px frame like the reference */}
+        <div
+          ref={tilesRef}
+          className="group mt-[40px] w-full overflow-hidden lg:mt-[28px]"
+          style={{
+            maskImage:
+              'linear-gradient(to right, transparent max(0px, calc(50% - 720px)), #000 calc(max(0px, calc(50% - 720px)) + 48px), #000 calc(min(100%, calc(50% + 720px)) - 48px), transparent min(100%, calc(50% + 720px)))',
+          }}
+        >
+          <ul
+            className="marquee-track flex w-max group-hover:[animation-play-state:paused]"
+            style={{ '--loop': `${LOOP_SECONDS}s` }}
+            aria-label="The Flex in numbers"
+          >
+            {[...HALF, ...HALF].map((s, i) => (
+              <li
+                key={i}
+                aria-hidden={i >= STATS.length}
+                className="mr-[41px] flex w-[271px] shrink-0 flex-col gap-[17px] rounded-[4px] bg-[rgba(38,28,10,0.1)] p-[24px] text-white transition-colors duration-300 hover:bg-[rgba(38,28,10,0.28)]"
               >
-                <p className="font-grotesk text-[48px] leading-[48px] font-light tracking-[-0.96px] tabular-nums" aria-label={`${s.value}${s.suffix}`}>
+                <p className="font-grotesk text-[48px] leading-[48px] font-light tracking-[-0.96px] tabular-nums">
                   {Math.round(s.value * count)}
                   {s.suffix}
                 </p>
                 <p className="min-h-[35px] text-[14px] leading-[19px]">{s.label}</p>
-              </div>
-            )
-          })}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

@@ -89,6 +89,16 @@ body {
   animation: pulse-ring 2.2s ease-out infinite;
 }
 
+/* Stat tiles marquee: the track holds two identical halves and slides one half */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee var(--loop, 120s) linear infinite;
+}
+
 /* Nav links: underline grows from the left */
 .link-underline {
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
@@ -109,7 +119,8 @@ body {
   }
   .enter-up,
   .enter-scale,
-  .pulse-ring {
+  .pulse-ring,
+  .marquee-track {
     animation: none;
   }
 }
