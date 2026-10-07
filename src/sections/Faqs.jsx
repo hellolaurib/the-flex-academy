@@ -8,7 +8,7 @@ export default function Faqs() {
 
   return (
     <section id="faqs" className="mx-auto mt-[72px] flex max-w-[1230px] flex-col gap-[32px] px-[16px] lg:flex-row lg:gap-[58px]">
-      <h2 className="text-[32px] leading-[normal] font-semibold text-principal lg:w-[253.985px] lg:shrink-0">
+      <h2 data-reveal className="text-[32px] leading-[normal] font-semibold text-principal lg:w-[253.985px] lg:shrink-0">
         Frequently asked
         <br />
         questions
@@ -18,19 +18,19 @@ export default function Faqs() {
         {FAQS.map((f, i) => {
           const isOpen = open === i
           return (
-            <li key={f.q} className="border-b border-line">
+            <li key={f.q} data-reveal style={{ '--d': `${80 + i * 90}ms` }} className="border-b border-line">
               <h3>
                 <button
                   type="button"
                   aria-expanded={isOpen}
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="flex min-h-[73px] w-full cursor-pointer items-center justify-between gap-[16px] text-left text-[20px] leading-[normal] text-black lg:text-[24px]"
+                  className="flex min-h-[73px] w-full cursor-pointer items-center justify-between gap-[16px] group text-left text-[20px] leading-[normal] text-black transition-colors hover:text-principal lg:text-[24px]"
                 >
-                  <span>{f.q}</span>
+                  <span className="transition-[translate] duration-300 group-hover:translate-x-[6px]">{f.q}</span>
                   <img
                     alt=""
                     src={faqArrow}
-                    className={`mr-[8.45px] block size-[20px] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
+                    className={`mr-[8.45px] block size-[20px] shrink-0 transition-[rotate,translate] duration-300 group-hover:translate-x-[4px] ${isOpen ? 'rotate-90' : ''}`}
                   />
                 </button>
               </h3>

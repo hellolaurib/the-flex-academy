@@ -7,14 +7,14 @@ import { COHORT_AVATARS } from '../data/content.js'
 export default function Grow() {
   return (
     <section className="mx-auto flex max-w-[961px] flex-col items-center gap-[20px] px-[16px] pt-[79px] text-center lg:px-0">
-      <div className="flex items-center gap-[18px]">
+      <div data-reveal className="flex items-center gap-[18px]">
         <div className="flex">
           {COHORT_AVATARS.map((src, i) => (
             <img
               key={src}
               alt=""
               src={src}
-              className={`block size-[40px] rounded-full border border-principal object-cover ${i > 0 ? '-ml-[10px]' : ''}`}
+              className={`relative block size-[40px] rounded-full border border-principal object-cover transition-[translate] duration-200 hover:z-10 hover:-translate-y-[5px] ${i > 0 ? "-ml-[10px]" : ""}`}
             />
           ))}
         </div>
@@ -27,15 +27,17 @@ export default function Grow() {
         </div>
       </div>
 
-      <h2 className="text-[40px] leading-[1.14] font-medium text-principal lg:text-[65px]">
+      <h2 data-reveal style={{ '--d': '100ms' }} className="text-[40px] leading-[1.14] font-medium text-principal lg:text-[65px]">
         Grow your units, not <em className="font-normal">your workload</em>
       </h2>
 
-      <p className="max-w-[743px] text-[20px] leading-[28px] text-ink">
+      <p data-reveal style={{ '--d': '200ms' }} className="max-w-[743px] text-[20px] leading-[28px] text-ink">
         Manual work, thin margins and no time to grow? In a free strategy call, we'll look at your operation and show you how to turn it into a real company.
       </p>
 
-      <Button kind="call" variant="green" href="#book" />
+      <div data-reveal style={{ '--d': '300ms' }}>
+        <Button kind="call" variant="green" href="#book" />
+      </div>
     </section>
   )
 }

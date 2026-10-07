@@ -32,10 +32,10 @@ export const NAV_LINKS = [
 export const COHORT_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5]
 
 export const STATS = [
-  { value: '7', label: 'cities where The Flex runs apartments today' },
-  { value: '150+', label: 'companies that house their teams with The Flex' },
-  { value: '130+', label: 'booking channels connected through Base360' },
-  { value: '12', label: 'weeks to turn your rentals into a real company' },
+  { value: 7, suffix: '', label: 'cities where The Flex runs apartments today' },
+  { value: 150, suffix: '+', label: 'companies that house their teams with The Flex' },
+  { value: 130, suffix: '+', label: 'booking channels connected through Base360' },
+  { value: 12, suffix: '', label: 'weeks to turn your rentals into a real company' },
 ]
 
 export const STEPS = [

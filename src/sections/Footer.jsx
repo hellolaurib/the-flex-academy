@@ -22,7 +22,7 @@ export default function Footer() {
     <footer className="mt-[102px] bg-principal text-second">
       <div className="mx-auto max-w-[1440px] px-[16px] pt-[64px] pb-[48px] lg:h-[503px] lg:pt-[91px] lg:pr-[119px] lg:pb-0 lg:pl-[121px]">
         <div className="flex flex-col gap-[40px] lg:flex-row lg:justify-between">
-          <div className="lg:w-[517.586px]">
+          <div data-reveal className="lg:w-[517.586px]">
             <h2 className="text-[40px] leading-[1.2] font-semibold lg:flex lg:h-[155.4px] lg:items-center lg:text-[52px] lg:leading-[62px]">
               Not ready to start yet?
             </h2>
@@ -31,12 +31,12 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="w-full max-w-[439px] self-start rounded-[8px] bg-white drop-shadow-[0px_4px_12.5px_rgba(0,0,0,0.2)] lg:mt-[22px] lg:mr-[39px] lg:h-[181px]">
+          <div data-reveal style={{ '--d': '150ms' }} className="w-full max-w-[439px] self-start rounded-[8px] bg-white drop-shadow-[0px_4px_12.5px_rgba(0,0,0,0.2)] lg:mt-[22px] lg:mr-[39px] lg:h-[181px]">
             <p className="flex h-[50.2px] items-center border-b border-[#e7e7e7] px-[16px] text-[14px] leading-[19px] text-[rgba(0,0,0,0.7)]">
               Join the waitlist
             </p>
             {joined ? (
-              <p role="status" className="px-[20px] pt-[24px] pb-[24px] text-[14px] leading-[19px] text-principal">
+              <p role="status" className="enter-up px-[20px] pt-[24px] pb-[24px] text-[14px] leading-[19px] text-principal">
                 Thanks! You're on the list — we'll email {email} when the next webinar opens.
               </p>
             ) : (
@@ -79,7 +79,7 @@ export default function Footer() {
           <ul className="flex gap-[4px]">
             {SOCIALS.map((s) => (
               <li key={s.label}>
-                <a href="#top" aria-label={s.label} className="flex size-[50px] items-center justify-center rounded-full bg-[rgba(38,28,10,0.22)] transition-colors hover:bg-[rgba(38,28,10,0.45)]">
+                <a href="#top" aria-label={s.label} className="flex size-[50px] items-center justify-center rounded-full bg-[rgba(38,28,10,0.22)] transition-[background-color,scale] duration-200 hover:scale-110 hover:bg-[rgba(38,28,10,0.45)]">
                   <img alt="" src={s.icon} className="block size-[18px]" />
                 </a>
               </li>
@@ -88,7 +88,7 @@ export default function Footer() {
           <ul className="flex flex-wrap gap-x-[51px] gap-y-[12px] text-[14px] leading-[19px] lg:mt-[16px] lg:w-[566px]">
             {NAV_LINKS.map((l) => (
               <li key={l.href} className="whitespace-nowrap">
-                <a href={l.href} className="transition-opacity hover:opacity-60">{l.label}</a>
+                <a href={l.href} className="link-underline pb-[2px]">{l.label}</a>
               </li>
             ))}
           </ul>

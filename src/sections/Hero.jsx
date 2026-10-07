@@ -25,43 +25,43 @@ export default function Hero() {
     <>
       <section id="top" className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <img alt="" src={heroBg} className="absolute inset-0 size-full object-cover object-bottom" />
+          <img alt="" src={heroBg} data-parallax style={{ translate: '0 var(--parallax, 0px)' }} className="absolute inset-0 size-full scale-110 object-cover object-bottom" />
           <div className="absolute inset-0 bg-[rgba(0,0,0,0.41)]" />
         </div>
 
         <div className="relative mx-auto flex max-w-[1440px] flex-col items-center gap-[32px] px-[16px] pt-[64px] pb-[260px] text-center text-white lg:h-[725px] lg:pt-[86px] lg:pr-[119px] lg:pl-[124px]">
-          <div className="flex h-[22.41px] items-center">
+          <div className="enter-up flex h-[22.41px] items-center" style={{ '--d': '100ms' }}>
             <img alt="" src={starsHero} className="block h-[16px] w-[77px]" />
             <img alt="" src={starHalfHero} className="ml-[3.74px] block size-[16px]" />
             <p className="w-[220.641px] text-[16px] leading-[20px]">4.6 Rated by our first cohort</p>
           </div>
 
-          <h1 className="text-[52px] leading-[1] font-normal tracking-[-2px] lg:text-[96px] lg:leading-[82px]">
+          <h1 style={{ '--d': '220ms' }} className="enter-up text-[52px] leading-[1] font-normal tracking-[-2px] lg:text-[96px] lg:leading-[82px]">
             How to start a rental <br className="hidden lg:block" />
             business you own
           </h1>
 
-          <p className="max-w-[551.25px] text-[20px] leading-[28px]">
+          <p className="enter-up max-w-[551.25px] text-[20px] leading-[28px]" style={{ '--d': '360ms' }}>
             Learn the playbook and software behind The Flex, from your first unit to a real company.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-[29px]">
+          <div className="enter-up flex flex-wrap items-center justify-center gap-[29px]" style={{ '--d': '480ms' }}>
             <Button kind="seat" variant="cream" href="#webinar" />
             <Button kind="call" variant="ghost" href="#book" />
           </div>
         </div>
       </section>
 
-      <div className="relative z-10 mx-auto -mt-[209px] max-w-[994px] px-[16px] lg:px-0">
+      <div className="enter-scale relative z-10 mx-auto -mt-[209px] max-w-[994px] px-[16px] lg:px-0" style={{ '--d': '620ms' }}>
         <button
           type="button"
           onClick={() => setLightbox(true)}
           aria-label="Play video"
           className="group relative block aspect-[994/581] w-full cursor-pointer overflow-hidden rounded-[8px]"
         >
-          <img alt="" src={videoThumb} className="absolute inset-0 size-full object-cover" />
+          <img alt="" src={videoThumb} className="absolute inset-0 size-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]" />
           <div className="absolute inset-0 bg-[rgba(0,0,0,0.21)]" />
-          <div className="absolute top-[45.4%] left-1/2 h-[85px] w-[120px] -translate-x-1/2 rounded-[24px] bg-[rgba(0,0,0,0.5)] backdrop-blur-[3.5px] transition-transform duration-200 group-hover:scale-110 max-lg:scale-75">
+          <div className="absolute top-[45.4%] left-1/2 h-[85px] w-[120px] -translate-x-1/2 pulse-ring rounded-[24px] bg-[rgba(0,0,0,0.5)] backdrop-blur-[3.5px] transition-[scale,background-color] group-hover:bg-[rgba(0,0,0,0.65)] duration-200 group-hover:scale-110 max-lg:scale-75">
             <img
               alt=""
               src={playIcon}

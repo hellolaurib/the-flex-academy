@@ -4,7 +4,9 @@ import learnUnit from '../assets/figma/learn-unit.png'
 import learnInbox from '../assets/figma/learn-inbox.png'
 import { SMALL_LEARN_CARDS } from '../data/content.js'
 
-const card = 'relative shrink-0 overflow-hidden rounded-[12px] bg-white shadow-[0px_4px_9.2px_0px_rgba(0,0,0,0.08)]'
+const card =
+  'group relative shrink-0 overflow-hidden rounded-[12px] bg-white shadow-[0px_4px_9.2px_0px_rgba(0,0,0,0.08)] transition-[translate,box-shadow] duration-300 hover:-translate-y-[6px] hover:shadow-[0px_16px_30px_0px_rgba(0,0,0,0.12)]'
+const zoom = 'origin-top-left transition-transform duration-500 group-hover:scale-[1.03]'
 const iconBox = 'absolute left-[32px] size-[40px] rounded-[4px] border border-[rgba(255,255,255,0.05)] bg-principal'
 
 // "What you'll learn" (30:10315)
@@ -12,7 +14,7 @@ export default function Learn() {
   return (
     <section id="learn" className="mt-[78px] bg-cream">
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-[10px] px-[16px] py-[50px] lg:h-[1095px] lg:px-[122px]">
-        <div className="flex flex-col items-center gap-[20px] text-center lg:h-[138px]">
+        <div data-reveal className="flex flex-col items-center gap-[20px] text-center lg:h-[138px]">
           <h2 className="text-[40px] leading-[1.2] font-semibold text-principal lg:text-[52px] lg:leading-[62px]">
             What you'll <em className="font-normal">learn</em>
           </h2>
@@ -21,11 +23,11 @@ export default function Learn() {
 
         <div className="flex w-full max-w-[1013px] flex-col gap-[34px]">
           <div className="flex flex-col items-center gap-[28px] lg:flex-row">
-            <article className={`${card} h-[468px] w-full max-w-[317px]`}>
+            <article data-reveal style={{ '--d': '80ms' }} className={`${card} h-[468px] w-full max-w-[317px]`}>
               <div className={`${iconBox} top-[31.59px]`}>
                 <img alt="" src={iconHouse} className="absolute top-[6.41px] left-[6.5px] block size-[25px]" />
               </div>
-              <img alt="" src={learnUnit} className="absolute top-[91px] left-[31.5px] block h-[202px] w-[361px] max-w-none object-cover" />
+              <img alt="" src={learnUnit} className={`absolute top-[91px] left-[31.5px] block h-[202px] w-[361px] max-w-none object-cover ${zoom}`} />
               <h3 className="absolute top-[355px] left-[32px] text-[24px] leading-[normal] font-semibold whitespace-nowrap text-principal">
                 Find your first unit
               </h3>
@@ -34,12 +36,12 @@ export default function Learn() {
               </p>
             </article>
 
-            <article className={`${card} h-[520px] w-full lg:h-[468px] lg:w-[668px]`}>
+            <article data-reveal style={{ '--d': '200ms' }} className={`${card} h-[520px] w-full lg:h-[468px] lg:w-[668px]`}>
               <div className={`${iconBox} top-[32px]`}>
                 <img alt="" src={iconMessenger} className="absolute top-[6px] left-[6.5px] block size-[25px]" />
               </div>
-              <img alt="" src={learnInbox} className="absolute top-[89px] left-[31.5px] block h-[234px] w-[400px] max-w-none object-cover" />
-              <img alt="" src={learnInbox} className="absolute top-[89px] left-[448.5px] block h-[234px] w-[400px] max-w-none object-cover" />
+              <img alt="" src={learnInbox} className={`absolute top-[89px] left-[31.5px] block h-[234px] w-[400px] max-w-none object-cover ${zoom}`} />
+              <img alt="" src={learnInbox} className={`absolute top-[89px] left-[448.5px] block h-[234px] w-[400px] max-w-none object-cover ${zoom}`} />
               <h3 className="absolute top-[355px] left-[32px] text-[24px] leading-[normal] font-semibold text-principal lg:whitespace-nowrap">
                 Every guest message, one inbox
               </h3>
@@ -50,8 +52,8 @@ export default function Learn() {
           </div>
 
           <div className="flex flex-col items-center gap-[28px] lg:flex-row">
-            {SMALL_LEARN_CARDS.map((c) => (
-              <article key={c.title} className={`${card} h-[271.59px] w-full max-w-[317.33px]`}>
+            {SMALL_LEARN_CARDS.map((c, i) => (
+              <article key={c.title} data-reveal style={{ '--d': `${80 + i * 120}ms` }} className={`${card} h-[271.59px] w-full max-w-[317.33px]`}>
                 <div className={`${iconBox} top-[32px]`}>
                   <img alt="" src={c.icon} className={`absolute top-[7px] ${c.iconLeft} block size-[24px]`} />
                 </div>

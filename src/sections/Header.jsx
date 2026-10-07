@@ -18,7 +18,7 @@ export default function Header() {
           <ul className="hidden w-[564px] items-center gap-[51px] text-[14px] leading-[19px] text-principal lg:flex">
             {NAV_LINKS.map((l) => (
               <li key={l.href} className="whitespace-nowrap">
-                <a href={l.href} className="transition-opacity hover:opacity-60">{l.label}</a>
+                <a href={l.href} className="link-underline pb-[2px]">{l.label}</a>
               </li>
             ))}
           </ul>

@@ -18,7 +18,7 @@ export default function Webinar() {
 
   return (
     <section id="webinar" className="mx-auto flex max-w-[1240px] flex-col items-center gap-[59px] px-[16px] pt-[109px]">
-      <div className="flex flex-col items-center gap-[10px] text-center">
+      <div data-reveal className="flex flex-col items-center gap-[10px] text-center">
         <h2 className="text-[40px] leading-[1.2] font-semibold text-principal lg:h-[82px] lg:text-[52px] lg:leading-[62px]">
           Join the free webinar, <em className="font-normal">save your seat today</em>
         </h2>
@@ -28,15 +28,15 @@ export default function Webinar() {
       </div>
 
       <div className="flex w-full flex-col items-center gap-[48px] lg:w-auto lg:flex-row lg:gap-[158px]">
-        <div className="flex w-full max-w-[356px] flex-col gap-[8px]">
+        <div data-reveal style={{ '--d': '80ms' }} className="flex w-full max-w-[356px] flex-col gap-[8px]">
           <div className="flex flex-col gap-[5px] lg:h-[79px] lg:w-[381px]">
             <h3 className="text-[32px] leading-[32px] font-medium text-principal opacity-98">Meet the founders live.</h3>
             <p className="font-poppins text-[16px] leading-[22.4px] text-black opacity-98">Fill in the form to save your free seat.</p>
           </div>
           <p className="text-[14px] leading-[19px] text-black opacity-92">Event Details &amp; Registration</p>
           {EVENT_DETAILS.map((d) => (
-            <div key={d.text} className="flex items-center gap-[19px]">
-              <div className="relative size-[50px] shrink-0 rounded-full bg-principal opacity-92">
+            <div key={d.text} className="group flex items-center gap-[19px]">
+              <div className="relative size-[50px] shrink-0 rounded-full bg-principal opacity-92 transition-[rotate,scale] duration-300 group-hover:scale-110 group-hover:-rotate-8">
                 <img alt="" src={d.icon} className={`absolute left-[12.5px] ${d.iconTop} block size-[24px]`} />
               </div>
               <p className="text-[16px] leading-[20px] text-black opacity-92">{d.text}</p>
@@ -47,7 +47,7 @@ export default function Webinar() {
           </p>
         </div>
 
-        <div className="w-full max-w-[473px] shrink-0 overflow-hidden rounded-[12px] bg-white/94 shadow-[0px_4px_19px_0px_rgba(0,0,0,0.18)] lg:h-[536px] lg:w-[473px]">
+        <div data-reveal style={{ '--d': '200ms' }} className="w-full max-w-[473px] shrink-0 overflow-hidden rounded-[12px] bg-white/94 shadow-[0px_4px_19px_0px_rgba(0,0,0,0.18)] lg:h-[536px] lg:w-[473px]">
           <div className="px-[32px] pt-[30px]">
             <h3 className="text-[32px] leading-[normal] font-medium text-principal">Save your seat</h3>
             <p className="mt-[8px] text-[16px] leading-[20px] text-[rgba(30,30,30,0.7)]">Three quick details and you're in.</p>
@@ -55,7 +55,7 @@ export default function Webinar() {
           <div className="mx-[32px] mt-[26px] h-px bg-[rgba(30,30,30,0.1)]" />
 
           {sent ? (
-            <div role="status" className="flex flex-col items-start gap-[12px] px-[37px] pt-[40px] pb-[40px]">
+            <div role="status" className="enter-up flex flex-col items-start gap-[12px] px-[37px] pt-[40px] pb-[40px]">
               <p className="text-[24px] leading-[normal] font-semibold text-principal">You're in, {form.name.split(' ')[0]}!</p>
               <p className="text-[16px] leading-[20px] text-[rgba(30,30,30,0.7)]">
                 We've saved your seat. Check {form.email} for the joining link — and if you can't make it live, we'll send you the recording.
@@ -87,7 +87,7 @@ export default function Webinar() {
               </label>
               <button
                 type="submit"
-                className="mt-[40px] block h-[46.41px] w-full cursor-pointer rounded-[4px] bg-principal font-poppins text-[16px] leading-[22.4px] text-white transition-opacity hover:opacity-90"
+                className="mt-[40px] block h-[46.41px] w-full cursor-pointer rounded-[4px] bg-principal font-poppins text-[16px] leading-[22.4px] text-white transition-[opacity,scale] hover:opacity-90 active:scale-[0.98]"
               >
                 Save my free seat
               </button>

@@ -26,7 +26,7 @@ export default function Button({ kind = 'call', variant = 'cream', href, onClick
       href={href}
       onClick={onClick}
       type={href ? undefined : 'button'}
-      className={`group inline-flex h-[39px] shrink-0 cursor-pointer items-center gap-[7px] rounded-[30px] border border-transparent pl-[24px] text-[12.8px] font-semibold whitespace-nowrap underline-offset-2 transition-colors duration-200 ${size.width} ${VARIANTS[variant]} ${className}`}
+      className={`group inline-flex h-[39px] shrink-0 cursor-pointer items-center gap-[7px] rounded-[30px] border border-transparent pl-[24px] text-[12.8px] font-semibold whitespace-nowrap underline-offset-2 transition-[color,background-color,scale] duration-200 active:scale-[0.97] ${size.width} ${VARIANTS[variant]} ${className}`}
     >
       <span className={`${size.labelWidth} text-center leading-[13px]`}>{size.label}</span>
       <span className="relative h-[16px] w-[15px] shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]">

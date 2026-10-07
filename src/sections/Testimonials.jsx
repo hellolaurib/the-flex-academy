@@ -17,7 +17,7 @@ function Stars() {
 export default function Testimonials() {
   return (
     <section className="mx-auto flex max-w-[1240px] flex-col gap-[62px] px-[16px] pt-[71px]">
-      <div className="flex flex-col items-center gap-[10px] text-center">
+      <div data-reveal className="flex flex-col items-center gap-[10px] text-center">
         <h2 className="text-[40px] leading-[1.2] font-semibold text-principal lg:text-[52px] lg:leading-[62px]">
           Real operators, <em className="font-normal">real progress</em>
         </h2>
@@ -25,8 +25,8 @@ export default function Testimonials() {
       </div>
 
       <div className="flex flex-col items-center gap-[43px] lg:flex-row">
-        {TESTIMONIALS.map((t) => (
-          <article key={t.name} className="w-full max-w-[373px] shrink-0 rounded-[12px] bg-principal px-[32px] pt-[51px] pb-[24px] lg:h-[383px] lg:w-[373px]">
+        {TESTIMONIALS.map((t, i) => (
+          <article key={t.name} data-reveal style={{ '--d': `${80 + i * 120}ms` }} className="w-full transition-[translate,box-shadow] duration-300 hover:-translate-y-[6px] hover:shadow-[0px_18px_34px_0px_rgba(28,57,26,0.28)] max-w-[373px] shrink-0 rounded-[12px] bg-principal px-[32px] pt-[51px] pb-[24px] lg:h-[383px] lg:w-[373px]">
             <Stars />
             <div className="mt-[28px] flex w-full max-w-[313px] flex-col gap-[6px]">
               <h3 className="text-[24px] leading-[normal] font-semibold text-white lg:flex lg:h-[80px] lg:items-center">{t.title}</h3>
